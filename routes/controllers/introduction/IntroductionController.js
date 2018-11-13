@@ -24,7 +24,7 @@ IntroductionController.get('/:id', function(req, res){
     if(guideRepository.getAllMessages().length - 1 < index){
        
         ResponseBuilder.onError(res)
-                        .setMessage('Sorry id does not existed' + req.params.id)
+                        .setMessage('Sorry id does not existed ' + req.params.id)
                         .build();
     } else {
         ResponseBuilder.onSuccess(res)

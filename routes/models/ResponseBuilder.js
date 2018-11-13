@@ -1,3 +1,4 @@
+var objectUtil = require('../shared/utils/objectUtil');
 
 var ResponseBuilder = {
     statusCode : 200,
@@ -46,32 +47,43 @@ var ResponseBuilder = {
         return this;
     },
     buildBodyOnly(){
-        if (this.res === undefined){
-            throw new Error('Res object is undefined');
+        try {
+            if (this.res === undefined){
+                throw new Error('Res object is undefined');
+            }
+            var data = objectUtil.isJsonValid(this.body) ? JSON.parse(this.body) : this.body;
+            return this.res.end(data);
+        } catch (error) {
+            throw new Error(error.message);
         }
-        return this.res.end(JSON.stringify(this.body));
     },
     build(){
-        var response = {};
-        if (Object.keys(this.body).length === 0 
-            || this.body === undefined 
-            || this.body === null){
-            response = {
-                'statusCode': this.statusCode,
-                'message': this.message,
-            };
-        } else {
-            response = {
-                'statusCode': this.statusCode,
-                'message': this.message,
-                'data': this.body
-            };
+        try {
+            var response = {};
+            if (Object.keys(this.body).length === 0 
+                || this.body === undefined 
+                || this.body === null){
+                response = {
+                    'statusCode': this.statusCode,
+                    'message': this.message,
+                };
+            } else {
+                var data = objectUtil.isJsonValid(this.body) ? JSON.parse(this.body) : this.body;
+                response = {
+                    'statusCode': this.statusCode,
+                    'message': this.message,
+                    'data': data
+                };
+            }
+            
+            if (this.res === undefined){
+                throw new Error('Res object is undefined');
+            }
+            return this.res.end(JSON.stringify(response));
+        } catch (error) {
+            throw new Error (error.message);
         }
-        
-        if (this.res === undefined){
-            throw new Error('Res object is undefined');
-        }
-        return this.res.end(JSON.stringify(response));  
+          
     }
 };
 

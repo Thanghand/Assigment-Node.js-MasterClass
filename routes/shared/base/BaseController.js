@@ -1,5 +1,7 @@
-var parseUrlUtil = require('../utils/ParseUrlUtil');
+var parseUrlUtil = require('../utils/parseUrlUtil');
+var objectUtil = require('../utils/objectUtil');
 var ResponseBuilder = require('../../models/ResponseBuilder');
+var StringDecoder = require('string_decoder').StringDecoder;
 
 const mappingGetPath = {};
 const mappingPostPath = {};
@@ -11,14 +13,15 @@ var BaseController = {
     get: function(path, functionRequestAndResponse){
         if (path === '/'){
             mappingGetPath[this.configPath] = functionRequestAndResponse;
+            return;
         }
         mappingGetPath[path] = functionRequestAndResponse;
-
     },
 
     post: function(path, functionRequestAndResponse){
-        mappingPostPath[path] = functionRequestAndResponse;        
-        // mappingEndpoint[path] = functionRequestAndResponse;
+        if (path === '/'){
+            mappingPostPath[this.configPath] = functionRequestAndResponse;  
+        }
     },
 
     put: function(path, functionRequestAndResponse){
@@ -30,7 +33,6 @@ var BaseController = {
     },
 
     handleRequest: function(req, res){
-        console.log('Controller Handle request');
         var method = req.method.toLowerCase();
         switch(method){
             case 'get':{
@@ -41,7 +43,7 @@ var BaseController = {
                     methodPath(req, res);
                 } else {
                     var queryStringObject = parseUrlUtil.getQueryObjectFromUrl(req.url);
-                    if (isEmpty(queryStringObject)){
+                    if (objectUtil.isEmpty(queryStringObject)){
                         var methodPath = {};
                         for(var key in mappingGetPath) {
                             if(key.includes(':')){
@@ -63,9 +65,23 @@ var BaseController = {
                 break;
             }
             case 'post':{
-                ResponseBuilder.onError(res)
-                                .setMessage('This method have not support yet')
-                                .build();
+                var trimpath = parseUrlUtil.parseUrl(req.url);
+                if (trimpath === this.configPath){
+                    var decoder = new StringDecoder('utf-8');
+                    var buffer = '';
+                    req.on('data', function(data) {
+                        buffer += decoder.write(data);
+                    });
+
+                    req.on('end', function() {
+                        buffer += decoder.end();
+                        req.body = buffer;
+                        var methodPath = mappingPostPath[trimpath];
+                        methodPath(req, res);
+                    });
+
+                    return;
+                }
                 break;
             }
             default: {
@@ -78,8 +94,5 @@ var BaseController = {
     }
 };
 
-function isEmpty(obj) {
-    return Object.keys(obj).length === 0;
-}
 
 module.exports = BaseController;

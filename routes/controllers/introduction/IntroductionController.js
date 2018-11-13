@@ -34,4 +34,11 @@ IntroductionController.get('/:id', function(req, res){
     }
 });
 
+IntroductionController.post('/', function(req, res){
+    ResponseBuilder.onSuccess(res)
+                    .setMessage('Add Message successflly with body')
+                    .setBody(req.body)
+                    .build();
+});
+
 module.exports = IntroductionController;

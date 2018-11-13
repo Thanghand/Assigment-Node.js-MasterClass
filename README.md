@@ -73,5 +73,5 @@ IntroductionController.post('/', function(req, res){
     }
 }
 
-### Note: I have already handled error handling for my project. When you start with error api, it will response error message.
+### Note: I have already handled error handling for my project. When you start with error api, it will response error message. Or you can send request with Put and Delete, it also responses error message.
 

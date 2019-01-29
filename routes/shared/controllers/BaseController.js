@@ -1,6 +1,6 @@
 var parseUrlUtil = require('../utils/parseUrlUtil');
 var objectUtil = require('../utils/objectUtil');
-var ResponseBuilder = require('../../models/ResponseBuilder');
+var ResponseBuilder = require('../models/ResponseBuilder');
 var StringDecoder = require('string_decoder').StringDecoder;
 
 const mappingGetPath = {};

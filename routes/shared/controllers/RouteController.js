@@ -1,5 +1,5 @@
 var parseUrlUtil = require('../utils/parseUrlUtil');
-var ResponseBuilder = require('../../models/ResponseBuilder');
+var ResponseBuilder = require('../models/ResponseBuilder');
 
 var RouteController = {
     configRouting : {},
@@ -12,7 +12,8 @@ var RouteController = {
             var endpoint = trimpath.split('/')[0];
 
             // Get Controller
-            var foundController = undefined;
+            var foundController;
+            console.log(this.configRouting.controllers);
             this.configRouting.controllers.forEach(function(controller) {
                 if (controller.configPath === endpoint){
                     foundController = controller;

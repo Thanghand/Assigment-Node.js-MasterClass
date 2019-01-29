@@ -1,9 +1,9 @@
 // Define dependency
-var ResponseBuilder = require('../../models/ResponseBuilder');
-var guideRepository = require('../../repositories/GuideRepository');
-var BaseController = require('../../shared/base/BaseController');
+var ResponseBuilder = require('../../shared/models/ResponseBuilder');
+var guideRepository = require('./GuideRepository');
+var BaseController = require('../../shared/controllers/BaseController');
 
-var IntroductionController = BaseController;
+var IntroductionController =  Object.assign({}, BaseController);
 
 // Define configPath;
 IntroductionController.configPath = 'hello';
@@ -14,7 +14,7 @@ IntroductionController.get('/', function(req, res){
                     .setBody(guideRepository.getAllMessages())
                     .build();
 });
-
+  
 IntroductionController.get('/:id', function(req, res){
     var index = req.params.id;
 

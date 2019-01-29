@@ -1,4 +1,4 @@
-var objectUtil = require('../shared/utils/objectUtil');
+var objectUtil = require('../utils/objectUtil');
 
 var ResponseBuilder = {
     statusCode : 200,

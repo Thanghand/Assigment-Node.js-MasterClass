@@ -1,8 +1,8 @@
-var BaseController = require('../../../shared/controllers/BaseController');
+var Controller = require('../../../shared/controllers/Controller');
 var ResponseBuilder = require('../../../shared/models/ResponseBuilder');
 
 // Define AuthController
-var AuthController = new BaseController('auth');
+var AuthController = new Controller('auth');
 
 AuthController.post('/signIn', function (req, res) {
     ResponseBuilder.onSuccess(res)

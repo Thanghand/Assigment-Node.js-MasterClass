@@ -4,9 +4,9 @@ var ResponseBuilder = require('../models/ResponseBuilder');
 var StringDecoder = require('string_decoder').StringDecoder;
 
 
-module.exports = BaseController;
+module.exports = Controller;
 
-function BaseController(path) {
+function Controller(path) {
     this.configPath = path;
     this.mappingGetPath = {};
     this.mappingPostPath = {};
@@ -14,7 +14,7 @@ function BaseController(path) {
     this.mappingDeletePath = {};
 }
 
-BaseController.prototype.get = function get(path, functionRequestAndResponse) {
+Controller.prototype.get = function get(path, functionRequestAndResponse) {
     if (path === '/') {
         this.mappingGetPath[this.configPath] = functionRequestAndResponse;
         return;
@@ -22,7 +22,7 @@ BaseController.prototype.get = function get(path, functionRequestAndResponse) {
     this.mappingGetPath[this.configPath + path] = functionRequestAndResponse;
 };
 
-BaseController.prototype.post = function (path, functionRequestAndResponse) {
+Controller.prototype.post = function (path, functionRequestAndResponse) {
     if (path === '/') {
         this.mappingPostPath[this.configPath] = functionRequestAndResponse;
         return;
@@ -31,15 +31,15 @@ BaseController.prototype.post = function (path, functionRequestAndResponse) {
 
 };
 
-BaseController.prototype.put = function (path, functionRequestAndResponse) {
+Controller.prototype.put = function (path, functionRequestAndResponse) {
     this.mappingPutPath[path] = functionRequestAndResponse;
 };
 
-BaseController.prototype.delete = function (path, functionRequestAndResponse) {
+Controller.prototype.delete = function (path, functionRequestAndResponse) {
     this.mappingDeletePath[path] = functionRequestAndResponse;
 };
 
-BaseController.prototype.handleRequest = function (req, res) {
+Controller.prototype.handleRequest = function (req, res) {
     var method = req.method.toLowerCase();
     switch (method) {
         case 'get': {

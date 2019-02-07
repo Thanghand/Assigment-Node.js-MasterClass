@@ -1,7 +1,7 @@
-var BaseController = require('../../../shared/controllers/BaseController');
+var Controller = require('../../../shared/controllers/Controller');
 var ResponseBuilder = require('../../../shared/models/ResponseBuilder');
 
-var ProfileController = new BaseController('profile')
+var ProfileController = new Controller('profile')
 
 ProfileController.get('/:id', function(req, res){
     ResponseBuilder.onSuccess(res)

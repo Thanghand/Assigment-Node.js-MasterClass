@@ -1,10 +1,12 @@
 var BaseController = require('../../../shared/controllers/BaseController');
+var ResponseBuilder = require('../../../shared/models/ResponseBuilder');
 
-var ProfileController = Object.assign({}, BaseController);
-ProfileController.configPath = 'profile';
+var ProfileController = new BaseController('profile')
 
 ProfileController.get('/:id', function(req, res){
-
+    ResponseBuilder.onSuccess(res)
+    .setMessage('Nothing happen')
+    .build();
 });
 
 ProfileController.put('/:id', function(req, res){

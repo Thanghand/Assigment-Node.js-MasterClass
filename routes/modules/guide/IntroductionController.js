@@ -3,10 +3,7 @@ var ResponseBuilder = require('../../shared/models/ResponseBuilder');
 var guideRepository = require('./GuideRepository');
 var BaseController = require('../../shared/controllers/BaseController');
 
-var IntroductionController =  Object.assign({}, BaseController);
-
-// Define configPath;
-IntroductionController.configPath = 'hello';
+var IntroductionController = new BaseController('hello');
 
 IntroductionController.get('/', function(req, res){
     ResponseBuilder.onSuccess(res)
@@ -17,7 +14,6 @@ IntroductionController.get('/', function(req, res){
   
 IntroductionController.get('/:id', function(req, res){
     var index = req.params.id;
-
     if (isNaN(index)) 
         throw new Error('Sorry Id should be a number');
        
@@ -42,3 +38,4 @@ IntroductionController.post('/', function(req, res){
 });
 
 module.exports = IntroductionController;
+

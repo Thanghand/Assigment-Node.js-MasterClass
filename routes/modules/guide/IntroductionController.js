@@ -1,7 +1,7 @@
 // Define dependency
 var ResponseBuilder = require('../../shared/models/ResponseBuilder');
 var guideRepository = require('./GuideRepository');
-var Controller = require('../../shared/controllers/BaseController');
+var Controller = require('../../shared/controllers/Controller');
 
 var IntroductionController = new Controller('hello');
 

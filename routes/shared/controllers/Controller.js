@@ -83,18 +83,23 @@ Controller.prototype.handleRequest = function (req, res) {
                 req.body = buffer;
                 try {
                     if (trimpath === this.configPath) {
-                        var methodPath = this.mappingPostPath[this.configPath];
+                        let methodPath = this.mappingPostPath[this.configPath];
                         methodPath(req, res);
                         return;
                     }
-                    var methodPath = this.mappingPostPath[trimpath];
+
+                    let methodPath = this.mappingPostPath[trimpath];
+                    if (methodPath === undefined)
+                        throw new Error('Cannot find api');
+
                     methodPath(req, res);
-                } catch(ex) {
+                } catch (ex) {
+                    console.error('Error: ', ex);
                     ResponseBuilder.onError(res)
-                                    .setMessage('This method have not support yet')
-                                    .build();
+                        .setMessage('This method have not support yet')
+                        .build();
                 }
-            });
+            }, this);
             break;
         }
         default: {

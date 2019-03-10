@@ -1,6 +1,6 @@
 var IntroductionController = require('./modules/guide/IntroductionController');
-var AuthController = require('./modules/user/controllers/AuthController');
-var ProfileController = require('./modules/user/controllers/ProfileController');
+var AuthController = require('./modules/user/authentication/AuthController');
+var ProfileController = require('./modules/user/profile/ProfileController');
 var Routes = require('./shared/controllers/Routes');
 
 var router = new Routes();

@@ -21,7 +21,6 @@ var ResponseBuilder = {
         this.body = {};
         this.message = '';
         this.res = res;
-        this.res.setHeader('Content-Type', 'application/json');
         this.res.writeHead(this.statusCode);
         return this;
     },
@@ -31,7 +30,6 @@ var ResponseBuilder = {
         this.body = {};
         this.message = '';
         this.res = res;
-        this.res.setHeader('Content-Type', 'application/json');
         this.res.writeHead(this.statusCode);
         return this;
     },
@@ -42,7 +40,6 @@ var ResponseBuilder = {
         this.body = {};
         this.message = '';
         this.res = res;
-        this.res.setHeader('Content-Type', 'application/json');
         this.res.writeHead(this.statusCode);
         return this;
     },

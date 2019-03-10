@@ -80,7 +80,7 @@ Controller.prototype.handleRequest = function (req, res) {
                 buffer += decoder.write(data);
             }).on('end', () => {
                 buffer += decoder.end();
-                req.body = buffer;
+                req.body = JSON.parse(buffer);
                 try {
                     if (trimpath === this.configPath) {
                         let methodPath = this.mappingPostPath[this.configPath];
@@ -96,15 +96,15 @@ Controller.prototype.handleRequest = function (req, res) {
                 } catch (ex) {
                     console.error('Error: ', ex);
                     ResponseBuilder.onError(res)
-                        .setMessage('This method have not support yet')
-                        .build();
+                                   .setMessage('Error ' + ex.message)
+                                   .build();
                 }
             }, this);
             break;
         }
         default: {
             ResponseBuilder.onError(res)
-                .setMessage('This method have not support yet')
+                .setMessage('Error')
                 .build();
             break;
         }

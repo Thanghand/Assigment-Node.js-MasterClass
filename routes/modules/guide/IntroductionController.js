@@ -1,19 +1,26 @@
 // Define dependency
-var ResponseBuilder = require('../../shared/models/ResponseBuilder');
-var guideRepository = require('./GuideRepository');
-var Controller = require('../../shared/controllers/Controller');
+const ResponseBuilder = require('../../shared/models/ResponseBuilder');
+const guideRepository = require('./GuideRepository');
+const Controller = require('../../shared/controllers/Controller');
 
-var IntroductionController = new Controller('hello');
+// Define Controller
+function IntroductionController(configPath){
+    Controller.call(this, configPath);
+};
+IntroductionController.prototype = Object.create(Controller.prototype);
 
-IntroductionController.get('/', function(req, res){
+
+const introductionController = new Controller('hello');
+
+introductionController.get('/', function(req, res){
     ResponseBuilder.onSuccess(res)
                     .setMessage("Get All messages successfully")
                     .setBody(guideRepository.getAllMessages())
                     .build();
 });
   
-IntroductionController.get('/:id', function(req, res){
-    var index = req.params.id;
+introductionController.get('/:id', function(req, res){
+    const index = req.params.id;
     if (isNaN(index)) 
         throw new Error('Sorry Id should be a number');
        
@@ -30,12 +37,12 @@ IntroductionController.get('/:id', function(req, res){
     }
 });
 
-IntroductionController.post('/', function(req, res){
+introductionController.post('/', function(req, res){
     ResponseBuilder.onSuccess(res)
                     .setMessage('Add Message successflly with body')
                     .setBody(req.body)
                     .build();
 });
 
-module.exports = IntroductionController;
+module.exports = introductionController;
 

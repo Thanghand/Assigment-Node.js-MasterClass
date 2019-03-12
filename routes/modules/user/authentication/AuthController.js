@@ -1,8 +1,8 @@
-var Controller = require('../../../shared/controllers/Controller');
-var ResponseBuilder = require('../../../shared/models/ResponseBuilder');
-var ValidationUserLogic = require('./logics/ValidationUserLogic');
+const Controller = require('../../../shared/controllers/Controller');
+const ResponseBuilder = require('../../../shared/models/ResponseBuilder');
+const ValidationUserLogic = require('./logics/ValidationUserLogic');
 
-// Defne controller
+// Define controller
 function AuthController(configPath){
     Controller.call(this, configPath);
     this.validationUserLogic = new ValidationUserLogic();
@@ -10,8 +10,8 @@ function AuthController(configPath){
 AuthController.prototype = Object.create(Controller.prototype);
 
 // Create Controller
-var authController = new AuthController('auth');
-var self = authController;
+const authController = new AuthController('auth');
+const self = authController;
 
 authController.post('/signIn', function (req, res) {
     ResponseBuilder.onSuccess(res)

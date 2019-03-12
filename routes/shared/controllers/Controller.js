@@ -1,8 +1,7 @@
-var parseUrlUtil = require('../utils/parseUrlUtil');
-var objectUtil = require('../utils/objectUtil');
-var ResponseBuilder = require('../models/ResponseBuilder');
-var StringDecoder = require('string_decoder').StringDecoder;
-
+const parseUrlUtil = require('../utils/parseUrlUtil');
+const objectUtil = require('../utils/objectUtil');
+const ResponseBuilder = require('../models/ResponseBuilder');
+const StringDecoder = require('string_decoder').StringDecoder;
 
 module.exports = Controller;
 
@@ -40,24 +39,23 @@ Controller.prototype.delete = function (path, functionRequestAndResponse) {
 };
 
 Controller.prototype.handleRequest = function (req, res) {
-    var method = req.method.toLowerCase();
+    const method = req.method.toLowerCase();
     switch (method) {
         case 'get': {
             // Get the query string as an object
-            var trimpath = parseUrlUtil.parseUrl(req.url);
-            if (trimpath === this.configPath) {
-                var methodPath = this.mappingGetPath[this.configPath];
+            const trimPath = parseUrlUtil.parseUrl(req.url);
+            if (trimPath === this.configPath) {
+                const methodPath = this.mappingGetPath[this.configPath];
                 methodPath(req, res);
             } else {
-                var queryStringObject = parseUrlUtil.getQueryObjectFromUrl(req.url);
+                const queryStringObject = parseUrlUtil.getQueryObjectFromUrl(req.url);
                 if (objectUtil.isEmpty(queryStringObject)) {
-                    var methodPath = {};
-                    for (var key in this.mappingGetPath) {
+                    for (const key in this.mappingGetPath) {
                         if (key.includes(':')) {
-                            var methodPath = this.mappingGetPath[key];
-                            var nameObject = key.split(':')[1];
-                            var params = {};
-                            const objectOfTrimPath = trimpath.split('/')[1];
+                            const methodPath = this.mappingGetPath[key];
+                            const nameObject = key.split(':')[1];
+                            const params = {};
+                            const objectOfTrimPath = trimPath.split('/')[1];
                             params[nameObject] = objectOfTrimPath;
                             req["params"] = params;
                             methodPath(req, res);
@@ -66,16 +64,16 @@ Controller.prototype.handleRequest = function (req, res) {
                     }
                 } else {
                     // TODO: Will Handle later
-                    console.log("BBBBB");
+                    console.log("Handle Later");
                 }
             }
             break;
         }
 
         case 'post': {
-            var trimpath = parseUrlUtil.parseUrl(req.url);
-            var decoder = new StringDecoder('utf-8');
-            var buffer = '';
+            const trimpath = parseUrlUtil.parseUrl(req.url);
+            const  decoder = new StringDecoder('utf-8');
+            let buffer = '';
             req.on('data', (data) => {
                 buffer += decoder.write(data);
             }).on('end', () => {

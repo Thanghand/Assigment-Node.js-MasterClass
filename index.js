@@ -1,12 +1,12 @@
 // Dependencies
-var http = require('http');
-var https = require('https');
-var config = require('./config');
-var router = require('./routes/router');
-var fs = require('fs');
+const http = require('http');
+const https = require('https');
+const config = require('./config');
+const router = require('./routes/router');
+const fs = require('fs');
 
 // Configure the server to respond to all requests with a string
-var httpServer = http.createServer(function (req, res) {
+const httpServer = http.createServer(function (req, res) {
   router.handleRequest(req, res);
 });
 
@@ -16,12 +16,12 @@ httpServer.listen(config.httpPort, function () {
   router.build();
 });
 
-var serverOptions = {
+const serverOptions = {
 	'key': fs.readFileSync('./https/key.pem'),
 	'cert': fs.readFileSync('./https/cert.pem')
 };
 
-var httpsServer = https.createServer(serverOptions, function (req, res) {
+const httpsServer = https.createServer(serverOptions, function (req, res) {
  	router.handleRequest(req, res);
 });
 

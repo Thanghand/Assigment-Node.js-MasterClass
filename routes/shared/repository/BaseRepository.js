@@ -1,8 +1,7 @@
 
 module.exports = BaseRepository;
 
-function BaseRepository(name){
-    this.name = name;
+function BaseRepository(){
     this.add = function (entity, callback){
         callback(true);
     };

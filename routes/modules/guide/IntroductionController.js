@@ -12,14 +12,14 @@ IntroductionController.prototype = Object.create(Controller.prototype);
 
 const introductionController = new Controller('hello');
 
-introductionController.get('/', function(req, res){
+introductionController.get('/', (req, res) => {
     ResponseBuilder.onSuccess(res)
                     .setMessage("Get All messages successfully")
                     .setBody(guideRepository.getAllMessages())
                     .build();
 });
   
-introductionController.get('/:id', function(req, res){
+introductionController.get('/:id', (req, res) => {
     const index = req.params.id;
     if (isNaN(index)) 
         throw new Error('Sorry Id should be a number');
@@ -37,7 +37,7 @@ introductionController.get('/:id', function(req, res){
     }
 });
 
-introductionController.post('/', function(req, res){
+introductionController.post('/', (req, res) => {
     ResponseBuilder.onSuccess(res)
                     .setMessage('Add Message successflly with body')
                     .setBody(req.body)

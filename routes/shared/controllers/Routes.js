@@ -1,23 +1,23 @@
-var parseUrlUtil = require('../utils/parseUrlUtil');
-var ResponseBuilder = require('../models/ResponseBuilder');
+const parseUrlUtil = require('../utils/parseUrlUtil');
+const ResponseBuilder = require('../models/ResponseBuilder');
 
 module.exports = Routes;
 
 function Routes() {
     this.config = {};
     this.mapControllers = [];
-};
+}
 
 Routes.prototype.handleRequest = function (req, res) {
     try {
-        var trimpath = parseUrlUtil.parseUrl(req.url);
+        const trimpath = parseUrlUtil.parseUrl(req.url);
         console.log('New Request path: ', req.url);
 
         // Get Endpoint
-        var endpoint = trimpath.split('/')[0];
+        const endpoint = trimpath.split('/')[0];
 
         // Get Controller
-        var foundController = this.mapControllers[endpoint];
+        const foundController = this.mapControllers[endpoint];
         if (foundController === undefined)
             throw new Error('Cannot find api');
 
@@ -32,9 +32,9 @@ Routes.prototype.handleRequest = function (req, res) {
 };
 
 Routes.prototype.build = function () {
-    this.config.controllers.forEach(function (controller) {
-        var key = controller.configPath;
+    this.config.controllers.forEach(controller => {
+        const key = controller.configPath;
         this.mapControllers = { ...this.mapControllers, ...{ [key]: controller } };
     }, this);
-}
+};
 

@@ -26,6 +26,7 @@ Controller.prototype.post = function (path, functionRequestAndResponse) {
         this.mappingPostPath[this.configPath] = functionRequestAndResponse;
         return;
     }
+
     this.mappingPostPath[this.configPath + path] = functionRequestAndResponse;
 
 };
@@ -73,6 +74,7 @@ Controller.prototype.handleRequest = function (req, res) {
         case 'post': {
             const trimpath = parseUrlUtil.parseUrl(req.url);
             const  decoder = new StringDecoder('utf-8');
+
             let buffer = '';
             req.on('data', (data) => {
                 buffer += decoder.write(data);

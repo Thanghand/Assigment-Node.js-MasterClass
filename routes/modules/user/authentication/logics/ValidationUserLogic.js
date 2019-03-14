@@ -1,21 +1,29 @@
 const UserTransformsModel = require('../../shared/transfomrations/UserTransformsModel');
-const UserRepository = require('../../shared/repository/UserRepository');
 
 module.exports = ValidationUserLogic;
 
-function ValidationUserLogic() {
+function ValidationUserLogic(userRepository) {
     this.UserTransformsModel = new UserTransformsModel();
-    this.userRepository = new UserRepository();
-};
+    this.userRepository = userRepository;
+}
 
-ValidationUserLogic.prototype.validateNewAccount = function validateNewAccount(body, response) {
+ValidationUserLogic.prototype.validateNewAccount = function validateNewAccount(body) {
     const userEntity = this.UserTransformsModel.transformBodyToUserEntity(body);
 
     if (!userEntity.username || !userEntity.email || !userEntity.password)
         throw new Error('Username, email or password cannot be empty');
 
-    this.userRepository.add(userEntity, function (result) {
-        response(userEntity);
+    return new Promise((resolve, reject) => {
+        const userRepository = this.userRepository;
+        userRepository.getByQuery(userEntity.schema, { email: userEntity.email, username: userEntity.username})
+            .then((entity) => {
+                reject(`Account has already existed, please change email: ${entity.email} or username: ${entity.username}`);
+            }, (err) => {
+                console.log(err);
+                    userRepository.add(userEntity).then(result => {
+                        resolve(result);
+                    });
+            });
     });
 };
 

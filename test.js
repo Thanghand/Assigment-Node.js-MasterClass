@@ -1,17 +1,17 @@
-function BaseRepository(name){
-    this.name = name;
-    this.add = function add(entity, callback){
-        callback('Ok');
-    };
+var obj = {
+    a: undefined,
+    b: 'thang',
+    c: false
 };
+var objb = {
+    b: 't',
+    c: false
+}
+// a, b, c all found
+for ( var prop in obj ) {
+    console.log( "Object1: " + obj[prop] );
+}
 
+var matchingKeys = obj.filter(function(key){ return key.indexOf(b) !== -1 });
 
-function UserRepository(name){
-    BaseRepository.call(this, name);
-};
-
-var user = new UserRepository('Thang');
-user.add('Thang', function(result){
-    console.log('test: ', result);
-});
-console.log('USer: ', user);
+console.log( "Object1: " + matchingKeys);

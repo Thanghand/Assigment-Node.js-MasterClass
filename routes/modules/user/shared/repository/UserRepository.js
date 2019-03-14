@@ -1,4 +1,4 @@
-var BaseRepository = require('../../../../shared/repository/BaseRepository');
+const BaseRepository = require('../../../../shared/repository/BaseRepository');
 
 module.exports = UserRepository;
 

@@ -1,4 +1,4 @@
-var url = require('url');
+const url = require('url');
 
 const ParseUrlUtil = {
     parseUrl: function(paramUrl){

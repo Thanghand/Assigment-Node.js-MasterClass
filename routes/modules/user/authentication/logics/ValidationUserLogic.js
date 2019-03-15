@@ -6,7 +6,6 @@ function ValidationUserLogic(userRepository) {
     this.UserTransformsModel = UserTransformsModel;
     this.userRepository = userRepository;
 }
-
 ValidationUserLogic.prototype.validateNewAccount = function validateNewAccount(body) {
 
     const userEntity = this.UserTransformsModel.transformBodyToUserEntity(body);

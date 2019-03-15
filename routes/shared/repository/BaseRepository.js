@@ -43,18 +43,22 @@ function BaseRepository(){
                    if (listFile.length == 0)
                        reject(new Error('Cannot find entity'));
 
+                   const promises = [];
                    listFile.forEach( file => {
                        const id = file.split('.')[0];
-                       LocalFileDatabase.read(schema, id)
-                           .then(data => {
-                               for(const prop in queryString){
-                                   if (data[prop] &&  data[prop] === queryString[prop]){
-                                       resolve(data);
-                                   }
-                               }
-                               reject(new Error('Cannot find entity'));
-                           }, err => reject(new Error('Cannot find entity')));
+                       promises.push(LocalFileDatabase.read(schema, id));
                    });
+
+                   Promise.all(promises).then(userEntities => {
+                       userEntities.forEach( data => {
+                           for(const prop in queryString){
+                               if (data[prop] && data[prop] === queryString[prop]){
+                                   resolve(data);
+                               }
+                           }
+                       });
+                       reject(new Error('Cannot find entity'))
+                   }, err => reject(new Error('Cannot find entity')));
                });
        });
    };

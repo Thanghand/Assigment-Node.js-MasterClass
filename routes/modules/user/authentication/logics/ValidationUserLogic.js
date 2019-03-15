@@ -3,11 +3,12 @@ const UserTransformsModel = require('../../shared/transfomrations/UserTransforms
 module.exports = ValidationUserLogic;
 
 function ValidationUserLogic(userRepository) {
-    this.UserTransformsModel = new UserTransformsModel();
+    this.UserTransformsModel = UserTransformsModel;
     this.userRepository = userRepository;
 }
 
 ValidationUserLogic.prototype.validateNewAccount = function validateNewAccount(body) {
+
     const userEntity = this.UserTransformsModel.transformBodyToUserEntity(body);
 
     if (!userEntity.username || !userEntity.email || !userEntity.password)
@@ -15,6 +16,7 @@ ValidationUserLogic.prototype.validateNewAccount = function validateNewAccount(b
 
     return new Promise((resolve, reject) => {
         const userRepository = this.userRepository;
+
         userRepository.getByQuery(userEntity.schema, { email: userEntity.email, username: userEntity.username})
             .then((entity) => {
                 reject(`Account has already existed, please change email: ${entity.email} or username: ${entity.username}`);
@@ -25,8 +27,4 @@ ValidationUserLogic.prototype.validateNewAccount = function validateNewAccount(b
                     });
             });
     });
-};
-
-ValidationUserLogic.prototype.verifyAccount = function verifyAccount(body, response){
-
 };

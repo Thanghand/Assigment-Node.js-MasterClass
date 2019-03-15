@@ -1,11 +1,9 @@
-var UserEntity = require('../../../../shared/models/entities/UserEntity');
+const UserEntity = require('../../../../shared/models/entities/UserEntity');
 
-module.exports = UserTransformsModel;
+const UserTransformsModel = {};
 
-function UserTransformsModel(){};
-
-UserTransformsModel.prototype.transformBodyToUserEntity = function transformBodyToEntity(body){
-    var entity = new UserEntity();
+UserTransformsModel.transformBodyToUserEntity = function transformBodyToEntity(body){
+    const entity = new UserEntity();
     entity.username = body.username;
     entity.password = body.password;
     entity.email = body.email;
@@ -13,5 +11,7 @@ UserTransformsModel.prototype.transformBodyToUserEntity = function transformBody
     entity.address.street = body.address.street ? body.address.street : '';
     entity.address.city = body.address.city ? body.address.city : '';
     entity.address.zipCode = body.address.zipCode ? body.address.zipCode : '';
-    return entity; 
+    return entity;
 };
+
+module.exports = UserTransformsModel;

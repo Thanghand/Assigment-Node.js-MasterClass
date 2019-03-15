@@ -7,7 +7,7 @@
 
 ### Note: Eventhough I know Es6, my library is using basic javascript. I like to start with the basic first, so when I start to next Assgiment I will apply Es6.
 
-# How is it work
+# How does it work
 - I make two important base object: BaseController and RouteController.
 
 * When I start to work with route just config simple step: 
@@ -42,7 +42,7 @@ IntroductionController.post('/', function(req, res){
 
 ### Note: You can see , I can start new controller very quickly with these steps.
 
-# How my api work: 
+# How does my api work: 
 
 ### Get: /hello  => 
 * {

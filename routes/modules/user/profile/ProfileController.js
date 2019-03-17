@@ -1,7 +1,7 @@
 const Controller = require('../../../shared/controllers/Controller');
 const ResponseBuilder = require('../../../shared/models/ResponseBuilder');
 
-const ProfileController = new Controller('profile')
+const ProfileController = new Controller('profile');
 
 ProfileController.get('/:id', function(req, res){
     ResponseBuilder.onSuccess(res)

@@ -14,16 +14,18 @@ ValidationUserLogic.prototype.validateNewAccount = function validateNewAccount(b
         throw new Error('Username, email or password cannot be empty');
 
     return new Promise((resolve, reject) => {
-        const userRepository = this.userRepository;
 
-        userRepository.getByQuery(userEntity.schema, { email: userEntity.email, username: userEntity.username})
+        const userRepository = this.userRepository;
+        const query  = { email: userEntity.email, username: userEntity.username};
+
+        userRepository.getByQuery(userEntity.schema, query)
             .then((entity) => {
                 reject(`Account has already existed, please change email: ${entity.email} or username: ${entity.username}`);
             }, (err) => {
                 console.log(err);
-                    userRepository.add(userEntity).then(result => {
-                        resolve(result);
-                    });
+                userRepository.add(userEntity).then(result => {
+                    resolve(result);
+                });
             });
     });
 };

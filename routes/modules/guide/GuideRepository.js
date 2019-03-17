@@ -5,7 +5,7 @@ const guideMessages = [
     'Please connect to my facebook ThangHand',
     'Please contact to me via gmail: caohoangthang93@gmail.com'
 ]
-var GuideRepository = {
+const GuideRepository = {
     getAllMessages : function(){
         return guideMessages;
     },
@@ -13,5 +13,5 @@ var GuideRepository = {
     getMessage : function(index){
         return guideMessages[index];
     }
-}
+};
 module.exports = GuideRepository;

@@ -9,7 +9,6 @@ function AuthController(configPath){
     this.userRepository = new UserRepository();
     this.validationUserLogic = new ValidationUserLogic(this.userRepository);
 }
-
 AuthController.prototype = Object.create(Controller.prototype);
 
 // Create Controller
@@ -25,12 +24,12 @@ authController.post('/signIn',  (req, res) => {
 authController.post('/signUp',  (req, res) => {
     self.validationUserLogic
         .validateNewAccount(req.body)
-        .then(function(result){
+        .then(result => {
             ResponseBuilder.onSuccess(res)
                 .setMessage('SignIn successfully')
                 .setBody(result)
                 .build();
-        }, function (error) {
+        }, error => {
             ResponseBuilder.onError(res)
                 .setMessage(error)
                 .build();

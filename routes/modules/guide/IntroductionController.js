@@ -6,7 +6,8 @@ const Controller = require('../../shared/controllers/Controller');
 // Define Controller
 function IntroductionController(configPath){
     Controller.call(this, configPath);
-};
+}
+
 IntroductionController.prototype = Object.create(Controller.prototype);
 
 

@@ -35,6 +35,6 @@ authController.post('/signUp',  (req, res) => {
                 .setMessage(error)
                 .build();
         });
-} );
+});
 
 module.exports = authController;

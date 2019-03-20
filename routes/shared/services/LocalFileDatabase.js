@@ -109,7 +109,6 @@ LocalFileDatabase.prototype.list = (dir) => {
 
     const folder = `${directory}${dir}/`;
 
-    console.log('Directory, ', folder);
     return new Promise((resolve, reject) => {
         fsPromise.readdir(folder)
             .then(data => {

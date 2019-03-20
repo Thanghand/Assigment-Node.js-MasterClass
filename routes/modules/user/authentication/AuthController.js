@@ -1,13 +1,20 @@
 const Controller = require('../../../shared/controllers/Controller');
 const ResponseBuilder = require('../../../shared/models/ResponseBuilder');
 const UserRepository = require('../shared/repository/UserRepository');
+const TokenRepository = require('../../../shared/repository/TokenRepository');
+
 const ValidationUserLogic = require('./logics/ValidationUserLogic');
+const VerifyUserLogic = require('./logics/VerifyUserLogic');
 
 // Define controller
 function AuthController(configPath){
     Controller.call(this, configPath);
+
     this.userRepository = new UserRepository();
+    this.tokenRepository = new TokenRepository();
+
     this.validationUserLogic = new ValidationUserLogic(this.userRepository);
+    this.verifyUserLogic = new VerifyUserLogic(this.userRepository, this.tokenRepository);
 }
 
 AuthController.prototype = Object.create(Controller.prototype);
@@ -17,15 +24,27 @@ const authController = new AuthController('auth');
 const self = authController;
 
 authController.post('/signIn',  (req, res) => {
-    ResponseBuilder.onSuccess(res)
-                    .setMessage('SignIn successfully')
-                    .build();
+
+    self.verifyUserLogic
+        .verifyAccount(req.body)
+        .then(result => {
+            ResponseBuilder.onSuccess(res)
+                .setMessage('SignIn successfully')
+                .setBody(result)
+                .build();
+        }, err => {
+            ResponseBuilder.onError(res)
+                .setMessage(`${err}`)
+                .build();
+        });
+
+
 });
 
 authController.post('/signUp',  (req, res) => {
     self.validationUserLogic
         .validateNewAccount(req.body)
-        .then(function(result){
+        .then(result => {
             ResponseBuilder.onSuccess(res)
                 .setMessage('SignIn successfully')
                 .setBody(result)

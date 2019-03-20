@@ -7,9 +7,9 @@ const ObjectId = () => {
     }).toLowerCase();
 };
 
-function BaseEntity(schema){
+function BaseEntity(schema, id){
     this.schema= schema;
-    this.id = ObjectId();
+    this.id = id ? id : ObjectId();
     this.createdAt = new Date();
     this.updatedAt = "";
 }

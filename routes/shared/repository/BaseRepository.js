@@ -40,7 +40,7 @@ function BaseRepository(){
                    return listFile
                })
                .then(listFile => {
-                   if (listFile.length == 0)
+                   if (listFile.length === 0)
                        reject(new Error('Cannot find entity'));
 
                    const promises = [];

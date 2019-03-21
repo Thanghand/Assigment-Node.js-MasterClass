@@ -36,7 +36,7 @@ authController.post('/signIn',  (req, res) => {
                 .build();
         }, err => {
             ResponseBuilder.onError(res, 401)
-                .setMessage(`${err}`)
+                .setMessage('Unauthorized')
                 .build();
         });
 });

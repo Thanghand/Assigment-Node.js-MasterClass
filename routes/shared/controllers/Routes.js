@@ -1,10 +1,14 @@
 const parseUrlUtil = require('../utils/parseUrlUtil');
 const ResponseBuilder = require('../models/ResponseBuilder');
+const fs = require('fs');
+const path = require('path');
+
+const directory = baseDir = path.join(__dirname,'../../../db/');
 
 module.exports = Routes;
 
-function Routes() {
-    this.config = {};
+function Routes(config) {
+    this.config = config;
     this.mapControllers = [];
 }
 
@@ -32,9 +36,24 @@ Routes.prototype.handleRequest = function (req, res) {
 };
 
 Routes.prototype.build = function () {
+
+    // Setup controllers
+
     this.config.controllers.forEach(controller => {
         const key = controller.configPath;
         this.mapControllers = { ...this.mapControllers, ...{ [key]: controller } };
     }, this);
+
+    // Init table database
+
+    const userCollection = `${directory}user`;
+    const tokenCollection = `${directory}token`;
+
+    if(!fs.existsSync(userCollection))
+        fs.mkdirSync(userCollection);
+
+    if(!fs.existsSync(tokenCollection))
+        fs.mkdirSync(tokenCollection);
+
 };
 

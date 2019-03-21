@@ -3,8 +3,9 @@ const ResponseBuilder = require('../../../shared/models/ResponseBuilder');
 const UserRepository = require('../shared/repository/UserRepository');
 const TokenRepository = require('../../../shared/repository/TokenRepository');
 
-const ValidationUserLogic = require('./logics/ValidationUserLogic');
-const VerifyUserLogic = require('./logics/VerifyUserLogic');
+const CreateAccountLogic = require('./logics/CreateAccountLogic');
+const LoginLogic = require('./logics/LoginLogic');
+const LogoutLogic = require('./logics/LogoutLogic');
 
 // Define controller
 function AuthController(configPath){
@@ -13,8 +14,9 @@ function AuthController(configPath){
     this.userRepository = new UserRepository();
     this.tokenRepository = new TokenRepository();
 
-    this.validationUserLogic = new ValidationUserLogic(this.userRepository);
-    this.verifyUserLogic = new VerifyUserLogic(this.userRepository, this.tokenRepository);
+    this.createAccountLogic = new CreateAccountLogic(this.userRepository);
+    this.loginLogic = new LoginLogic(this.userRepository, this.tokenRepository);
+    this.logoutLogic = new LogoutLogic(this.userRepository, this.tokenRepository);
 }
 
 AuthController.prototype = Object.create(Controller.prototype);
@@ -25,7 +27,7 @@ const self = authController;
 
 authController.post('/signIn',  (req, res) => {
 
-    self.verifyUserLogic
+    self.loginLogic
         .verifyAccount(req.body)
         .then(result => {
             ResponseBuilder.onSuccess(res)
@@ -37,13 +39,30 @@ authController.post('/signIn',  (req, res) => {
                 .setMessage(`${err}`)
                 .build();
         });
+});
 
+authController.post('/logout', (req, res) => {
 
+    self.logoutLogic
+        .logout(req.body)
+        .then(result => {
+            if(result)
+                ResponseBuilder.onSuccess(res)
+                    .setMessage('Logout successfully')
+                    .setBody(result)
+                    .build();
+
+        }, err => {
+            ResponseBuilder.onError(res)
+                .setMessage('Sorry there is something wrong')
+                .build();
+        })
 });
 
 authController.post('/signUp',  (req, res) => {
-    self.validationUserLogic
-        .validateNewAccount(req.body)
+
+    self.createAccountLogic
+        .createNewAccount(req.body)
         .then(result => {
             ResponseBuilder.onSuccess(res)
                 .setMessage('SignIn successfully')

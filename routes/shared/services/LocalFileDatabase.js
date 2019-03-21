@@ -9,7 +9,6 @@ function LocalFileDatabase() {}
 LocalFileDatabase.prototype.create =  (dir, file, data) => {
 
     const newFile = `${directory}${dir}/${file}.json`;
-
     return new Promise((resolve, reject) => {
         fsPromise.open(newFile, 'wx')
             .then(fileDescriptor => {
@@ -21,7 +20,7 @@ LocalFileDatabase.prototype.create =  (dir, file, data) => {
                     };
                 }
             }, function (err) {
-                reject(new Error(err))
+                reject(err)
             })
             .then(data => {
                 return new Promise(function (resolve, reject) {
@@ -35,7 +34,7 @@ LocalFileDatabase.prototype.create =  (dir, file, data) => {
                 return new Promise(() => {
                     fs.close(fileDescriptor.fd , err => {
                         if(err)
-                            reject(new Error(err))
+                            reject(err);
                          else
                             resolve(data);
                     });
@@ -69,23 +68,24 @@ LocalFileDatabase.prototype.update =  (dir, file, data) =>  {
             .then(fileDescriptor => {
                 return {
                     fileDescriptor: fileDescriptor,
-                    data: JSON.stringify(data)
+                    stringData: JSON.stringify(data)
                 };
             })
             .then(data => {
+                console.log('Truncate', updateFile );
                 return new Promise(((resolve, reject) => {
-                    fsPromise.truncate(data.fileDescriptor)
+                    fsPromise.truncate(updateFile)
                         .then(() => {
                             resolve(data);
-                        })
+                        }, err => reject(err))
                 }));
             })
             .then(data => {
                 return new Promise((resolve, reject) => {
                     fsPromise.writeFile(data.fileDescriptor, data.stringData)
-                        .then( resolve => {
+                        .then(() => {
                             resolve(data.fileDescriptor);
-                        });
+                        }, err => reject(err));
                 });
             })
             .then(fileDescriptor => {
@@ -116,6 +116,14 @@ LocalFileDatabase.prototype.list = (dir) => {
             }, err => {
                 reject(new Error(err));
             });
+    });
+};
+
+LocalFileDatabase.prototype.delete = (dir, file) => {
+    const deleteFile = `${directory}${dir}/${file}.json`;
+
+    return new Promise((resolve, reject) => {
+        fsPromise.unlink(deleteFile).then(() => resolve(true), err => reject(err));
     });
 };
 

@@ -56,7 +56,7 @@ const ResponseBuilder = {
     },
     build(){
         try {
-            var response = {};
+            let response = {};
             if (Object.keys(this.body).length === 0 
                 || this.body === undefined 
                 || this.body === null){
@@ -65,7 +65,7 @@ const ResponseBuilder = {
                     'message': this.message,
                 };
             } else {
-                var data = objectUtil.isJsonValid(this.body) ? JSON.parse(this.body) : this.body;
+                let data = objectUtil.isJsonValid(this.body) ? JSON.parse(this.body) : this.body;
                 response = {
                     'statusCode': this.statusCode,
                     'message': this.message,

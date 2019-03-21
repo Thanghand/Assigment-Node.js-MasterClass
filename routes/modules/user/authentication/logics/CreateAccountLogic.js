@@ -1,14 +1,14 @@
 const UserTransformsModel = require('../../shared/transfomrations/UserTransformsModel');
 const HashUtil = require('../../shared/utils/HashUtil');
 
-module.exports = ValidationUserLogic;
+module.exports = CreateAccountLogic;
 
-function ValidationUserLogic(userRepository) {
+function CreateAccountLogic(userRepository) {
     this.UserTransformsModel = UserTransformsModel;
     this.userRepository = userRepository;
 }
 
-ValidationUserLogic.prototype.validateNewAccount = function validateNewAccount(body) {
+CreateAccountLogic.prototype.createNewAccount = function createNewAccount(body) {
 
     const userEntity = this.UserTransformsModel.transformBodyToUserEntity(body);
     userEntity.password = HashUtil.hash(userEntity.password);
@@ -25,7 +25,6 @@ ValidationUserLogic.prototype.validateNewAccount = function validateNewAccount(b
             .then((entity) => {
                 reject(`Account has already existed, please change email: ${entity.email} or username: ${entity.username}`);
             }, (err) => {
-                console.log(err);
                 userRepository.add(userEntity).then(result => {
                     resolve(result);
                 });

@@ -20,8 +20,11 @@ function BaseRepository(){
         });
     };
 
-    this.delete = function(id, callback) {
-
+    this.delete = function(schema, id) {
+        return new Promise((resolve, reject) => {
+            LocalFileDatabase.delete(schema, id)
+                .then(result => resolve(result), err => reject(err));
+        });
     };
 
    this.get = (entity) => {
@@ -31,14 +34,12 @@ function BaseRepository(){
                    resolve(result);
                }, err =>  reject(new Error(err)));
        });
-   }
+   };
 
    this.getByQuery = (schema, queryString) => {
        return new Promise((resolve, reject) => {
            LocalFileDatabase.list(schema)
-               .then(listFile => {
-                   return listFile
-               })
+               .then(listFile => listFile)
                .then(listFile => {
                    if (listFile.length === 0)
                        reject(new Error('Cannot find entity'));

@@ -9,6 +9,7 @@ function UserEntity(){
     this.email = "";
     this.password = "";
     this.phone = "";
+    this.isLogin = false;
     this.address =  {
         street: "",
         city: "",

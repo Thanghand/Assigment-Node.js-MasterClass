@@ -33,7 +33,7 @@ authController.post('/signIn',  (req, res) => {
                 .setBody(result)
                 .build();
         }, err => {
-            ResponseBuilder.onError(res)
+            ResponseBuilder.onError(res, 401)
                 .setMessage(`${err}`)
                 .build();
         });

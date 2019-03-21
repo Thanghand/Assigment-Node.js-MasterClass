@@ -1,6 +1,6 @@
-var objectUtil = require('../utils/objectUtil');
+const objectUtil = require('../utils/objectUtil');
 
-var ResponseBuilder = {
+const ResponseBuilder = {
     statusCode : 200,
     message: '',
     body: {},
@@ -83,5 +83,5 @@ var ResponseBuilder = {
           
     }
 };
-
 module.exports = ResponseBuilder;
+

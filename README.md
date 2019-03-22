@@ -15,8 +15,8 @@
 var introductionController = require('./controllers/introduction/IntroductionController');
 var RouteController = require('./shared/base/RouteController');
 
-var router = RouteController;
-router.configRouting = {
+var mainApp = RouteController;
+mainApp.configRouting = {
     'controllers': [
         introductionController
     ]

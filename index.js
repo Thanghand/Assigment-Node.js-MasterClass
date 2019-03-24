@@ -2,18 +2,18 @@
 const http = require('http');
 const https = require('https');
 const config = require('./config');
-const router = require('./routes/router');
+const app = require('./app/mainApp');
 const fs = require('fs');
 
 // Configure the server to respond to all requests with a string
 const httpServer = http.createServer(function (req, res) {
-  router.handleRequest(req, res);
+  app.handleRequest(req, res);
 });
 
 // Start the server
 httpServer.listen(config.httpPort, function () {
   console.log('The http server is up and running on port ' + config.httpPort + ' in ' + config.envName + ' mode.');
-  router.build();
+  app.build();
 });
 
 const serverOptions = {
@@ -22,11 +22,11 @@ const serverOptions = {
 };
 
 const httpsServer = https.createServer(serverOptions, function (req, res) {
- 	router.handleRequest(req, res);
+ 	app.handleRequest(req, res);
 });
 
 httpsServer.listen(config.httpsPort, function () {
   console.log('The https server is up and running on port ' + config.httpsPort + ' in ' + config.envName + ' mode.');
-  router.build();
+  app.build();
 });
 

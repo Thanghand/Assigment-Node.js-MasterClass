@@ -11,8 +11,6 @@ ProfileController.prototype = Object.create(Controller.prototype);
 const profileController = new ProfileController('profile');
 
 profileController.get('/:id', function(req, res){
-    console.log('Get Testing');
-
     ResponseBuilder.onSuccess(res)
     .setMessage('Nothing happen')
     .build();
@@ -23,7 +21,6 @@ profileController.put('/:id', function(req, res){
 });
 
 profileController.use('/:id', function (req, res, next){
-    console.log('Testing');
     next(req, res);
 });
 

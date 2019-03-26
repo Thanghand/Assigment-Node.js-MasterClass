@@ -3,7 +3,7 @@ const BaseEntity = require('./baseEntity');
 module.exports = MenuEntity;
 
 function MenuEntity(){
-    BaseEntity.call(this, 'menu');
+    BaseEntity.call(this);
     this.name = '';
     this.description = '';
     this.prices = {

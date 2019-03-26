@@ -13,20 +13,23 @@ CreateAccountLogic.prototype.createNewAccount = function createNewAccount(body) 
     const userEntity = this.UserTransformsModel.transformBodyToUserEntity(body);
     userEntity.password = HashUtil.hash(userEntity.password);
 
-    if (!userEntity.username || !userEntity.email || !userEntity.password)
-        throw new Error('Username, email or password cannot be empty');
+
 
     return new Promise((resolve, reject) => {
+
+        if (!userEntity.username || !userEntity.email || !userEntity.password)
+            reject (Error('Username, email or password cannot be empty'));
 
         const userRepository = this.userRepository;
         const query  = { email: userEntity.email, username: userEntity.username};
 
-        userRepository.getByQuery(userEntity.schema, query)
-            .then((entity) => {
-                reject(`Account has already existed, please change email: ${entity.email} or username: ${entity.username}`);
+        userRepository.getByQuery('user', query)
+            .then((entities) => {
+                if (entities.length > 0)
+                    reject(`Account has already existed, please change email: ${userEntity.email} or username: ${userEntity.username}`);
             }, (err) => {
                 console.log(err);
-                userRepository.add(userEntity).then(result => {
+                userRepository.add('user', userEntity).then(result => {
                     resolve(result);
                 });
             });

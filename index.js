@@ -21,12 +21,12 @@ const serverOptions = {
 	'cert': fs.readFileSync('./https/cert.pem')
 };
 
-const httpsServer = https.createServer(serverOptions, function (req, res) {
- 	app.handleRequest(req, res);
-});
-
-httpsServer.listen(config.httpsPort, function () {
-  console.log('The https server is up and running on port ' + config.httpsPort + ' in ' + config.envName + ' mode.');
-  app.build();
-});
+// const httpsServer = https.createServer(serverOptions, function (req, res) {
+//  	app.handleRequest(req, res);
+// });
+//
+// httpsServer.listen(config.httpsPort, function () {
+//   console.log('The https server is up and running on port ' + config.httpsPort + ' in ' + config.envName + ' mode.');
+//   app.build();
+// });
 

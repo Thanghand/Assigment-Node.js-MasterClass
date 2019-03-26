@@ -35,6 +35,7 @@ authController.post('/signIn',  (req, res) => {
                 .setBody(result)
                 .build();
         }, err => {
+            console.error('Error: ', err);
             ResponseBuilder.onError(res, 401)
                 .setMessage('Unauthorized')
                 .build();
@@ -65,7 +66,7 @@ authController.post('/signUp',  (req, res) => {
         .createNewAccount(req.body)
         .then(result => {
             ResponseBuilder.onSuccess(res)
-                .setMessage('SignIn successfully')
+                .setMessage('SignUp successfully')
                 .setBody(result)
                 .build();
         }, function (error) {

@@ -3,7 +3,7 @@ const BaseEntity = require('./baseEntity');
 module.exports = UserEntity;
 
 function UserEntity(){
-    BaseEntity.call(this, 'user');
+    BaseEntity.call(this);
 
     this.username = "";
     this.email = "";

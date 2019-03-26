@@ -2,7 +2,7 @@
 module.exports = LogoutRequest;
 
 function LogoutRequest(request) {
-    this.email = request.email;
+    this.id = request.id;
     this.token = request.token;
 }
 

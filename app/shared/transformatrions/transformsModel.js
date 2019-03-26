@@ -4,6 +4,7 @@ const MenuEntity = require('../models/entities/menuEntity');
 function TransformsModel(){}
 
 TransformsModel.prototype.transferRequestToMenuEntity = function(request) {
+
     const menuEntity = new MenuEntity();
     menuEntity.name = request.name;
     menuEntity.description = request.description;

@@ -18,7 +18,11 @@ LoginLogic.prototype.verifyAccount =  function (request) {
 
     return new Promise((resolve, reject) => {
         this.userRepository.getByQuery('user', query)
-            .then(entity => {
+            .then(entities => {
+                if (entities.length === 0)
+                    reject(new Error('No account existed'));
+
+                const entity = entities[0];
                 if (hashPassword === entity.password)
                     return entity;
                 else
@@ -27,7 +31,7 @@ LoginLogic.prototype.verifyAccount =  function (request) {
             .then(entity => {
                 return new Promise((resolve, reject) => {
                     entity.isLogin = true;
-                    this.userRepository.update(entity)
+                    this.userRepository.update('user', entity)
                         .then(userEntity => resolve(userEntity),
                                 err => reject(err));
                 });
@@ -35,7 +39,7 @@ LoginLogic.prototype.verifyAccount =  function (request) {
             .then(entity => {
                 const tokenEntity = new TokenEntity(HashUtil.createRandomString(40), entity.email);
                 return new Promise((resolve, reject) => {
-                    this.tokenRepository.add(tokenEntity).then(tokenEntity => {
+                    this.tokenRepository.add('token', tokenEntity).then(tokenEntity => {
                         resolve({
                            tokenEntity: tokenEntity,
                            userInfo: entity
@@ -46,6 +50,7 @@ LoginLogic.prototype.verifyAccount =  function (request) {
             .then(result => {
                 const response = {
                     token: result.tokenEntity.id,
+                    id: result.userInfo.id,
                     email: result.tokenEntity.email,
                     name: result.userInfo.username,
                     phone: result.userInfo.phone,

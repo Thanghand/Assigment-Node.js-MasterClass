@@ -13,14 +13,19 @@ function MenuController(path){
 MenuController.prototype = Object.create(Controller.prototype);
 
 // Create controller
-const menuController = new MenuController('pizza');
+const menuController = new MenuController('menus');
+const self = menuController;
 
-menuController.get('/', (req, res) =>{
-    this.searchMenuLogic.getAll()
+menuController.get('/', (req, res) => {
+    self.searchMenuLogic.getAll()
         .then(menuEntities => {
             ResponseBuilder.onSuccess(res)
-                .setMessage('Get all pizza')
+                .setMessage('Get all menu')
                 .setBody(menuEntities)
+                .build();
+        }, err => {
+            ResponseBuilder.onError(res)
+                .setMessage(`${err}`)
                 .build();
         });
 });

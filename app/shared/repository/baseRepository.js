@@ -3,17 +3,17 @@ const LocalFileDatabase = require ('../services/localFileDatabase');
 module.exports = BaseRepository;
 
 function BaseRepository(){
-    this.add = function (entity){
+    this.add = function (schema, entity){
         return new Promise((resolve, reject) => {
-            LocalFileDatabase.create(entity.schema, entity.id, entity)
+            LocalFileDatabase.create(schema, entity.id, entity)
                 .then(result => resolve(result),
                         err => reject(new Error(`failed: ${err}`)))
         });
     };
 
-    this.update = (entity) => {
+    this.update = (schema, entity) => {
         return new Promise((resolve, reject) => {
-            LocalFileDatabase.update(entity.schema, entity.id, entity)
+            LocalFileDatabase.update(schema, entity.id, entity)
                 .then((result) => {
                     resolve(result);
                 }, err => reject(new Error(err)));
@@ -27,9 +27,9 @@ function BaseRepository(){
         });
     };
 
-   this.get = (entity) => {
+   this.get = (schema, id) => {
        return new Promise((resolve, reject) => {
-           LocalFileDatabase.read(entity.schema, entity.id)
+           LocalFileDatabase.read(schema, id)
                .then(result => {
                    resolve(result);
                }, err =>  reject(new Error(err)));
@@ -50,15 +50,20 @@ function BaseRepository(){
                        promises.push(LocalFileDatabase.read(schema, id));
                    });
 
-                   Promise.all(promises).then(userEntities => {
-                       userEntities.forEach( data => {
+                   Promise.all(promises).then(entities => {
+                       const datas = [];
+                       entities.forEach( data => {
                            for(const prop in queryString){
                                if (data[prop] && data[prop] === queryString[prop]){
-                                   resolve(data);
+                                   datas.push(data);
                                }
                            }
                        });
-                       reject(new Error('Cannot find entity'))
+                       if (datas.length === 0)
+                           reject(new Error('Cannot find entity'));
+
+                       resolve(datas);
+
                    }, err => reject(new Error('Cannot find entity')));
                });
        });
@@ -67,7 +72,21 @@ function BaseRepository(){
    this.getAll = (schema) => {
        return new Promise(((resolve, reject) => {
            LocalFileDatabase.list(schema)
-               .then(listFile => resolve(listFile))
+               .then(listFile => listFile, err => reject(err))
+               .then(listFile => {
+
+                   if (listFile.length === 0)
+                       reject(new Error('Cannot find entity'));
+
+                   const promises = [];
+                   listFile.forEach( file => {
+                       const id = file.split('.')[0];
+                       promises.push(LocalFileDatabase.read(schema, id));
+                   });
+                   Promise.all(promises).then (entities => {
+                       resolve(entities);
+                   });
+               });
        }));
    }
 }

@@ -106,7 +106,6 @@ LocalFileDatabase.prototype.update =  (dir, file, data) =>  {
 };
 
 LocalFileDatabase.prototype.list = (dir) => {
-
     const folder = `${directory}${dir}/`;
 
     return new Promise((resolve, reject) => {

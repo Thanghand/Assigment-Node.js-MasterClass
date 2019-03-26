@@ -1,6 +1,6 @@
 const parseUrlUtil = require('../utils/parseUrlUtil');
 const ResponseBuilder = require('../models/responseBuilder');
-const PreparePizzas = require('../transformatrions/transformsModel');
+const PrepareMenuData = require('../../modules/prepare/prepareMenus');
 const fs = require('fs');
 const path = require('path');
 
@@ -56,9 +56,15 @@ ApplicationModules.prototype.build = function () {
 
     CreateCollection(userCollection);
     CreateCollection(tokenCollection);
-    CreateCollection(menuCollection);
 
     // PreparePizzas.run();
+    if(!fs.existsSync(menuCollection))
+    {
+        CreateCollection(menuCollection);
+        PrepareMenuData.run().then(menuEntities => {
+            console.log('Menu Entities: ', menuEntities);
+        });
+    }
 };
 
 function CreateCollection(collection){

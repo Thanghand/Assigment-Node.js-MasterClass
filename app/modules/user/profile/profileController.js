@@ -3,7 +3,6 @@ const ResponseBuilder = require('../../../shared/models/responseBuilder');
 
 // Define controller
 function ProfileController(configPath) {
-    console.log('Profile ', configPath);
     Controller.call(this, configPath);
 }
 ProfileController.prototype = Object.create(Controller.prototype);
@@ -25,6 +24,7 @@ profileController.put('/:id', function(req, res){
 
 profileController.use('/:id', function (req, res, next){
     console.log('Testing');
+    next(req, res);
 });
 
 module.exports = profileController;

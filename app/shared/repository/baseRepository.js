@@ -63,6 +63,13 @@ function BaseRepository(){
                });
        });
    };
+
+   this.getAll = (schema) => {
+       return new Promise(((resolve, reject) => {
+           LocalFileDatabase.list(schema)
+               .then(listFile => resolve(listFile))
+       }));
+   }
 }
 
 

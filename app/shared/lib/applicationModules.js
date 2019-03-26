@@ -1,5 +1,6 @@
 const parseUrlUtil = require('../utils/parseUrlUtil');
 const ResponseBuilder = require('../models/responseBuilder');
+const PreparePizzas = require('../transformatrions/transformsModel');
 const fs = require('fs');
 const path = require('path');
 
@@ -51,12 +52,17 @@ ApplicationModules.prototype.build = function () {
 
     const userCollection = `${directory}user`;
     const tokenCollection = `${directory}token`;
+    const menuCollection = `${directory}menu`;
 
-    if(!fs.existsSync(userCollection))
-        fs.mkdirSync(userCollection);
+    CreateCollection(userCollection);
+    CreateCollection(tokenCollection);
+    CreateCollection(menuCollection);
 
-    if(!fs.existsSync(tokenCollection))
-        fs.mkdirSync(tokenCollection);
-
+    // PreparePizzas.run();
 };
+
+function CreateCollection(collection){
+    if(!fs.existsSync(collection))
+        fs.mkdirSync(collection);
+}
 

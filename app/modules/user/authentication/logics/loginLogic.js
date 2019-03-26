@@ -9,7 +9,7 @@ function LoginLogic(userRepository, tokenRepository){
     this.tokenRepository = tokenRepository;
 }
 
-LoginLogic.prototype.verifyAccount =  function verifyAccount(request) {
+LoginLogic.prototype.verifyAccount =  function (request) {
 
     const loginRequest = new LoginRequest(request);
     const hashPassword = HashUtil.hash(loginRequest.password);

@@ -53,9 +53,11 @@ ApplicationModules.prototype.build = function () {
     const userCollection = `${directory}user`;
     const tokenCollection = `${directory}token`;
     const menuCollection = `${directory}menu`;
+    const orderCollection = `${directory}order`;
 
     CreateCollection(userCollection);
     CreateCollection(tokenCollection);
+    CreateCollection(orderCollection);
 
     // PreparePizzas.run();
     if(!fs.existsSync(menuCollection))

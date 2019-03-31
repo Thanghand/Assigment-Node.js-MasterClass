@@ -11,5 +11,6 @@ function MenuEntity(){
         medium: 0,
         large: 0
     };
+    this.sizes = ['small', 'medium', 'large'];
     this.image = '';
 }

@@ -52,5 +52,21 @@ ShoppingCartLogic.prototype.addCart = function (request) {
     }));
 };
 
+ShoppingCartLogic.prototype.getCurrentCart = function(userId){
+    return new Promise(((resolve, reject) => {
+        const query = {userId: userId};
+        this.orderRepository.getByQuery('order', query)
+            .then((entities) => {
+                entities.forEach( e => {
+                   if (!e.isPayed){
+                       resolve(e);
+                   }
+                });
+                let orderEntity = new OrderEntity(userId);
+                resolve(orderEntity);
+            }, err => reject(err));
+    }));
+};
+
 module.exports = ShoppingCartLogic;
 

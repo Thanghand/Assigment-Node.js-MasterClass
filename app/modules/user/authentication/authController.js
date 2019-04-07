@@ -8,8 +8,8 @@ const LoginLogic = require('./logics/loginLogic');
 const LogoutLogic = require('./logics/logoutLogic');
 
 // Define controller
-function AuthController(configPath){
-    Controller.call(this, configPath);
+function AuthController(){
+    Controller.call(this, 'auth');
 
     this.userRepository = new UserRepository();
     this.tokenRepository = new TokenRepository();
@@ -18,16 +18,14 @@ function AuthController(configPath){
     this.loginLogic = new LoginLogic(this.userRepository, this.tokenRepository);
     this.logoutLogic = new LogoutLogic(this.userRepository, this.tokenRepository);
 }
-
 AuthController.prototype = Object.create(Controller.prototype);
 
 // Create Controller
-const authController = new AuthController('auth');
-const self = authController;
+const authController = new AuthController();
 
 authController.post('/signIn',  (req, res) => {
 
-    self.loginLogic
+    authController.loginLogic
         .verifyAccount(req.body)
         .then(result => {
             ResponseBuilder.onSuccess(res)
@@ -44,7 +42,7 @@ authController.post('/signIn',  (req, res) => {
 
 authController.post('/logout', (req, res) => {
 
-    self.logoutLogic
+    authController.logoutLogic
         .logout(req.body)
         .then(result => {
             if(result)

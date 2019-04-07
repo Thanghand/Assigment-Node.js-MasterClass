@@ -4,20 +4,18 @@ const ShoppingCartLogic = require('./logics/shoppingCartLogic');
 const ResponseBuilder = require('../../shared/models/responseBuilder');
 
 // Define controller
-function ShoppingController(path){
-    Controller.call(this, path);
+function ShoppingController(){
+    Controller.call(this, 'shopping');
     this.orderRepository =  OrderRepository;
     this.shoppingCartLogic = new ShoppingCartLogic(this.orderRepository);
 }
 ShoppingController.prototype = Object.create(Controller.prototype);
 
 // Create controller
-
-const shoppingController = new ShoppingController('shopping');
-const self = shoppingController;
+const shoppingController = new ShoppingController();
 
 shoppingController.post('/', (req, res) => {
-    self.shoppingCartLogic.addCart(req.body)
+    shoppingController.shoppingCartLogic.addCart(req.body)
         .then(result => {
             ResponseBuilder.onSuccess(res)
                 .setMessage('Adding cart successfully')
@@ -33,8 +31,7 @@ shoppingController.post('/', (req, res) => {
 
 shoppingController.get('/:id', (req, res) => {
     const userId = req.params.id;
-    console.log("UserID: ", userId);
-    self.shoppingCartLogic.getCurrentCart(userId)
+    shoppingController.shoppingCartLogic.getCurrentCart(userId)
         .then(result => {
             if (result.carts.length === 0) {
                 ResponseBuilder.onSuccess(res)

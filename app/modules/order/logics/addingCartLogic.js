@@ -1,11 +1,11 @@
 const AddingNewCartRequest = require('../models/addingNewCartRequest');
 const OrderEntity = require('../../../shared/models/entities/orderEntity');
 
-function ShoppingCartLogic(orderRepository){
+function AddingCartLogic(orderRepository){
     this.orderRepository = orderRepository;
 }
 
-ShoppingCartLogic.prototype.addCart = function (request) {
+AddingCartLogic.prototype.addCart = function (request) {
 
     const newCartRequest = new AddingNewCartRequest(request);
 
@@ -24,10 +24,10 @@ ShoppingCartLogic.prototype.addCart = function (request) {
 
                 let menuCart;
                 entity.carts.forEach( cart => {
-                   if(cart.id === newCartRequest.menu.id) {
-                       cart.quantity += newCartRequest.menu.quantity;
-                       menuCart = cart;
-                   }
+                    if(cart.id === newCartRequest.menu.id) {
+                        cart.quantity += newCartRequest.menu.quantity;
+                        menuCart = cart;
+                    }
                 });
 
                 if (!menuCart)
@@ -52,21 +52,5 @@ ShoppingCartLogic.prototype.addCart = function (request) {
     }));
 };
 
-ShoppingCartLogic.prototype.getCurrentCart = function(userId){
-    return new Promise(((resolve, reject) => {
-        const query = {userId: userId};
-        this.orderRepository.getByQuery('order', query)
-            .then((entities) => {
-                entities.forEach( e => {
-                   if (!e.isPayed){
-                       resolve(e);
-                   }
-                });
-                let orderEntity = new OrderEntity(userId);
-                resolve(orderEntity);
-            }, err => reject(err));
-    }));
-};
-
-module.exports = ShoppingCartLogic;
+module.exports = AddingCartLogic;
 

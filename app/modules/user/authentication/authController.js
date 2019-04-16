@@ -12,7 +12,7 @@ function AuthController(){
     Controller.call(this, 'auth');
 
     this.userRepository = new UserRepository();
-    this.tokenRepository = new TokenRepository();
+    this.tokenRepository = TokenRepository;
 
     this.createAccountLogic = new CreateAccountLogic(this.userRepository);
     this.loginLogic = new LoginLogic(this.userRepository, this.tokenRepository);

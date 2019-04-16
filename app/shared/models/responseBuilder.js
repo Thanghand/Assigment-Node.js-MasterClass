@@ -6,6 +6,12 @@ const ResponseBuilder = {
     body: {},
     isSuccess: false,
     res: {},
+
+    setStatusCode: function(code){
+        this.statusCode = code;
+        return this;
+    },
+
     setMessage: function (message){
         this.message = message;
         return this;

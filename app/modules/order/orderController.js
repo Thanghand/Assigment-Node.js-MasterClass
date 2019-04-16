@@ -6,5 +6,11 @@ function OrderController() {
 }
 
 OrderController.prototype = Object.create(Controller.prototype);
-const self = new Controller();
+const orderController = new Controller();
 
+
+orderController.post('/', function (req, res) {
+
+});
+
+module.exports = orderController;

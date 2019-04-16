@@ -49,91 +49,94 @@ Controller.prototype.delete = function (path, functionRequestAndResponse) {
 
 Controller.prototype.handleRequest = function (req, res) {
     const method = req.method.toLowerCase();
-    switch (method) {
-        case 'get': {
-            // Get the query string as an object
-            const trimPath = parseUrlUtil.parseUrl(req.url);
-            if (trimPath === this.configPath) {
-                const methodPath = this.mappingGetPath[this.configPath];
-                const middleWareMethod = this.mappingUsePath[this.configPath];
-                if (middleWareMethod)
-                {
-                    console.log('MiddleWare 0');
-                    middleWareMethod(req, res, methodPath);
+    try {
+        switch (method) {
+            case 'get': {
+                // Get the query string as an object
+                const trimPath = parseUrlUtil.parseUrl(req.url);
+                if (trimPath === this.configPath) {
+                    const methodPath = this.mappingGetPath[this.configPath];
+                    const middleWareMethod = this.mappingUsePath[this.configPath];
+
+                    if (!methodPath)
+                        throw new Error('Internal error');
+
+                    if (middleWareMethod)
+                        middleWareMethod(req, res, methodPath);
+                    else
+                        methodPath(req, res);
+
+                } else {
+                    const queryStringObject = parseUrlUtil.getQueryObjectFromUrl(req.url);
+                    if (objectUtil.isEmpty(queryStringObject)) {
+                        for (const key in this.mappingGetPath) {
+                            if (key.includes(':')) {
+                                const methodPath = this.mappingGetPath[key];
+
+                                if (!methodPath)
+                                    throw new Error('Internal error');
+
+                                const nameObject = key.split(':')[1];
+                                const params = {};
+                                const objectOfTrimPath = trimPath.split('/')[1];
+
+                                params[nameObject] = objectOfTrimPath;
+                                req["params"] = params;
+
+                                let middleWareMethod = this.mappingUsePath[key];
+                                if (middleWareMethod)
+                                    middleWareMethod(req, res, methodPath);
+                                else
+                                {
+                                    middleWareMethod = this.mappingUsePath[this.configPath];
+                                    if (middleWareMethod)
+                                        middleWareMethod(req, res, methodPath);
+                                    else
+                                        methodPath(req, res);
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
-                else
-                {
-                    console.log('NoMiddleWare');
-                    methodPath(req, res);
-                }
+                break;
+            }
+            case 'post': {
+                const trimPath = parseUrlUtil.parseUrl(req.url);
+                const  decoder = new StringDecoder('utf-8');
 
-            } else {
-                const queryStringObject = parseUrlUtil.getQueryObjectFromUrl(req.url);
-                if (objectUtil.isEmpty(queryStringObject)) {
-                    for (const key in this.mappingGetPath) {
-                        if (key.includes(':')) {
-                            const methodPath = this.mappingGetPath[key];
-                            const nameObject = key.split(':')[1];
-                            const params = {};
-                            const objectOfTrimPath = trimPath.split('/')[1];
-
-                            params[nameObject] = objectOfTrimPath;
-                            req["params"] = params;
-
-                            const middleWareMethod = this.mappingUsePath[key];
+                let buffer = '';
+                req.on('data', (data) => {
+                    buffer += decoder.write(data);
+                }).on('end', () => {
+                    buffer += decoder.end();
+                    req.body = JSON.parse(buffer);
+                    try {
+                        if (trimPath === this.configPath) {
+                            let methodPath = this.mappingPostPath[this.configPath];
+                            const middleWareMethod = this.mappingUsePath[trimPath];
                             if (middleWareMethod)
                                 middleWareMethod(req, res, methodPath);
                             else
                                 methodPath(req, res);
-
-
-                            return;
                         }
+                    } catch (ex) {
+                        console.error('Error: ', ex);
+                        ResponseBuilder.onError(res)
+                            .setMessage('Error ' + ex.message)
+                            .build();
                     }
-                } else {
-                    // TODO: Will Handle later
-                    console.log("Handle Later");
-                }
+                }, this);
+                break;
             }
-            break;
+            default: {
+
+                break;
+            }
         }
-
-        case 'post': {
-            const trimPath = parseUrlUtil.parseUrl(req.url);
-            const  decoder = new StringDecoder('utf-8');
-
-            let buffer = '';
-            req.on('data', (data) => {
-                buffer += decoder.write(data);
-            }).on('end', () => {
-                buffer += decoder.end();
-                req.body = JSON.parse(buffer);
-                try {
-                    if (trimPath === this.configPath) {
-                        let methodPath = this.mappingPostPath[this.configPath];
-                        methodPath(req, res);
-                        return;
-                    }
-
-                    let methodPath = this.mappingPostPath[trimPath];
-                    if (methodPath === undefined)
-                        throw new Error('Cannot find api');
-
-                    methodPath(req, res);
-                } catch (ex) {
-                    console.error('Error: ', ex);
-                    ResponseBuilder.onError(res)
-                                   .setMessage('Error ' + ex.message)
-                                   .build();
-                }
-            }, this);
-            break;
-        }
-        default: {
-            ResponseBuilder.onError(res)
-                .setMessage('Error')
-                .build();
-            break;
-        }
+    } catch (err){
+        ResponseBuilder.onError(res)
+            .setMessage('Internal error')
+            .build();
     }
 };
